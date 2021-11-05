@@ -22,6 +22,21 @@ package tiny.core.model;
  */
 public class LdapServer {
 
+    /**
+     * 停止中
+     */
+    public static int STATUS_STOP = 0;
+
+    /**
+     * 実行中
+     */
+    public static int STATUS_RUNNING = 1;
+
+    /**
+     * 状態
+     */
+    private int status = STATUS_STOP;
+
     public void init() {
 
     }
@@ -32,6 +47,10 @@ public class LdapServer {
 
     public void stop() {
 
+    }
+
+    public int status() {
+        return this.status;
     }
 
 }
