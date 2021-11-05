@@ -1,5 +1,7 @@
-package tiny;
+package tiny.core;
 
+import tiny.core.HomePage;
+import tiny.core.WicketApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

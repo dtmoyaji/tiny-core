@@ -1,4 +1,4 @@
-package tiny;
+package tiny.core;
 
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPDirectiveSrcValue;

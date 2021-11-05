@@ -1,4 +1,4 @@
-package tiny;
+package tiny.core;
 
 import java.lang.management.ManagementFactory;
 
