@@ -1,10 +1,11 @@
-package tiny.core;
+package tiny.core.view;
 
-import tiny.core.HomePage;
+import tiny.core.view.HomePage;
 import tiny.core.WicketApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tiny.core.WicketApplication;
 
 /**
  * Simple test using the WicketTester

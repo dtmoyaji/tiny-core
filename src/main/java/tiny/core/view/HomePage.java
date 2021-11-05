@@ -1,4 +1,4 @@
-package tiny.core;
+package tiny.core.view;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
