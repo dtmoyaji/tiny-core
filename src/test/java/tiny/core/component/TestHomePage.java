@@ -1,6 +1,6 @@
-package tiny.core.view;
+package tiny.core.component;
 
-import tiny.core.view.HomePage;
+import tiny.core.component.HomePage;
 import tiny.core.WicketApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
