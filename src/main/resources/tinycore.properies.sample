@@ -12,4 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ldap_url=
+ldap_admin_context=
+ldap_admin_password=
 
+test_ldap_search_node=
+test_ldap_search_filter=

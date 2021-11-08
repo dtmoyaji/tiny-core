@@ -17,8 +17,10 @@ package tiny.core.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,9 +33,18 @@ public class PropertyReader {
     
     private Properties properties = null;
     
+    /**
+     * コンストラクタ
+     * @param filePath プロパティファイルのパス
+     */
     public PropertyReader(String filePath){
         try {
-            properties.load(new FileReader(filePath));
+            properties = new Properties();
+            File f = new File(filePath);
+            Logger.getLogger(this.getClass().getName()).info(f.getAbsolutePath());
+            properties.load(
+                    Files.newBufferedReader(Paths.get(f.getAbsolutePath()), StandardCharsets.UTF_8)
+            );
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PropertyReader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -41,6 +52,13 @@ public class PropertyReader {
         }
     }
     
-    
+    /**
+     * プロパティを取得する
+     * @param key 検索キー
+     * @return プロパティ値
+     */
+    public String getProperty(String key){
+        return this.properties.getProperty(key);
+    }
     
 }

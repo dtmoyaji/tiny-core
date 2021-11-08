@@ -37,13 +37,28 @@ import javax.naming.directory.SearchResult;
  */
 public class LdapClient {
 
+    private PropertyReader propReader = null;
+
+    private String base_principal = "";
+
+    private String admin_password = "";
+
     private HashMap env;
     private DirContext context;
 
     private String partition;
-    
-    public LdapClient(){
+
+    public LdapClient() {
         this.env = new HashMap();
+    }
+
+    public void loadProperty(String filePath) {
+        this.propReader = new PropertyReader(filePath);
+        this.init();
+    }
+    
+    public String getProperty(String key){
+        return this.propReader.getProperty(key);
     }
 
     public void setPartition(String partition) {
@@ -56,70 +71,34 @@ public class LdapClient {
 
     public static void main(String[] args) {
 
-        LdapClient client = new LdapClient();
-        client.init();
-        NamingEnumeration results = client.get();
-        client.close();
+       
 
-        try {
-            while (results != null && results.hasMore()) {
-                SearchResult si = (SearchResult) results.next();
-
-                /* エントリ名の出力 */
-                System.out.println("name: " + si.getName());
-
-                Attributes attrs = si.getAttributes();
-                if (attrs == null) {
-                    System.out.println("No attributes");
-                } else {
-                    /* 属性の出力 */
-                    for (NamingEnumeration ae = attrs.getAll();
-                            ae.hasMoreElements();) {
-                        Attribute attr = (Attribute) ae.next();
-                        String attrId = attr.getID();
-
-                        /* 属性値の出力 */
-                        for (Enumeration vals = attr.getAll();
-                                vals.hasMoreElements();
-                                System.out.println(attrId + ": " + vals.nextElement()));
-                    }
-                }
-                System.out.println();
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(LdapClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        System.out.println(
-                client.auth("",
-                        "")
-        );
-        
-        client.close();
     }
 
-    public DirContext init() {
-        this.context = null;
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "LDAPSVR"); //LDAPサーバ
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, "LDAP_NODE"); //ID, 組織
-        env.put(Context.SECURITY_CREDENTIALS, "PWD"); //パスワード
-        try {
-            this.context = new InitialDirContext(new Hashtable(env));
-        } catch (NamingException ex) {
-            ex.printStackTrace();
-        }
-        return this.context;
+    public void init() {
+
+        this.env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        this.env.put(Context.SECURITY_AUTHENTICATION, "simple");
+
+        this.env.put(Context.PROVIDER_URL, this.propReader.getProperty("ldap_server"));
+        this.base_principal = this.propReader.getProperty("ldap_princilal");
+        this.admin_password = this.propReader.getProperty("ldap_password");
+
     }
 
-    public NamingEnumeration get() {
+    public NamingEnumeration get(String node, String filter) {
         NamingEnumeration results = null;
         try {
             SearchControls constraints = new SearchControls();
             constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
-            results = this.context.search("", "", constraints);
+            this.env.put(Context.SECURITY_PRINCIPAL, this.base_principal);
+            this.env.put(Context.SECURITY_CREDENTIALS, this.admin_password);
+
+            this.context = new InitialDirContext(new Hashtable(this.env));
+            results = this.context.search(node, filter, constraints);
+            this.context.close();
+
         } catch (NamingException ex) {
             Logger.getLogger(LdapClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -145,13 +124,4 @@ public class LdapClient {
         return res;
     }
 
-    public void close() {
-        try {
-            if (this.context != null) {
-                this.context.close();
-            }
-        } catch (NamingException ex) {
-            Logger.getLogger(LdapClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }
