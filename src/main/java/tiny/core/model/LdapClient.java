@@ -78,9 +78,6 @@ public class LdapClient {
         this.env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         this.env.put(Context.SECURITY_AUTHENTICATION, "simple");
 
-        //this.env.put(Context.PROVIDER_URL, this.propReader.getProperty("ldap_server"));
-        //this.base_principal = this.propReader.getProperty("ldap_princilal");
-        //this.admin_password = this.propReader.getProperty("ldap_password");
         this.env.put(Context.PROVIDER_URL, this.propReader.getProperty(LdapClient.LDAP_URL));
         this.base_principal = this.propReader.getProperty(LdapClient.LDAP_ADMIN_CONTEXT);
         this.admin_password = this.propReader.getProperty(LdapClient.LDAP_ADMIN_PASSWORD);
