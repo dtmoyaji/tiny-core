@@ -33,13 +33,17 @@ import javax.naming.directory.SearchControls;
  */
 public class LdapClient {
 
+    public static final String LDAP_URL = "ldap_url";
+    public static final String LDAP_ADMIN_CONTEXT = "ldap_admin_context";
+    public static final String LDAP_ADMIN_PASSWORD = "ldap_admin_password";
+
     private PropertyReader propReader = null;
 
     private String base_principal = "";
 
     private String admin_password = "";
 
-    private HashMap<String,String> env;
+    private HashMap<String, String> env;
     private DirContext context;
 
     private String partition;
@@ -52,8 +56,8 @@ public class LdapClient {
         this.propReader = new PropertyReader(filePath);
         this.init();
     }
-    
-    public String getProperty(String key){
+
+    public String getProperty(String key) {
         return this.propReader.getProperty(key);
     }
 
@@ -67,8 +71,6 @@ public class LdapClient {
 
     public static void main(String[] args) {
 
-       
-
     }
 
     public void init() {
@@ -76,9 +78,12 @@ public class LdapClient {
         this.env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         this.env.put(Context.SECURITY_AUTHENTICATION, "simple");
 
-        this.env.put(Context.PROVIDER_URL, this.propReader.getProperty("ldap_server"));
-        this.base_principal = this.propReader.getProperty("ldap_princilal");
-        this.admin_password = this.propReader.getProperty("ldap_password");
+        //this.env.put(Context.PROVIDER_URL, this.propReader.getProperty("ldap_server"));
+        //this.base_principal = this.propReader.getProperty("ldap_princilal");
+        //this.admin_password = this.propReader.getProperty("ldap_password");
+        this.env.put(Context.PROVIDER_URL, this.propReader.getProperty(LdapClient.LDAP_URL));
+        this.base_principal = this.propReader.getProperty(LdapClient.LDAP_ADMIN_CONTEXT);
+        this.admin_password = this.propReader.getProperty(LdapClient.LDAP_ADMIN_PASSWORD);
 
     }
 
@@ -105,6 +110,7 @@ public class LdapClient {
         boolean res = false;
 
         //LDAP接続情報
+        env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, uid); //ID, 組織
         env.put(Context.SECURITY_CREDENTIALS, password); //パスワード
 

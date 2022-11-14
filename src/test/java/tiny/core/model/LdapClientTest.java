@@ -24,32 +24,32 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchResult;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author bythe
  */
 public class LdapClientTest {
-    
+
     public LdapClientTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -71,7 +71,7 @@ public class LdapClientTest {
     @Test
     public void testGetProperty() {
         System.out.println("getProperty");
-        String key = "ldap_server";
+        String key = LdapClient.LDAP_URL;
         LdapClient instance = new LdapClient();
         String filePath = "target/classes/tinycore.properties";
         instance.loadProperty(filePath);
@@ -97,12 +97,13 @@ public class LdapClientTest {
      */
     @Test
     public void testMain() {
-         LdapClient client = new LdapClient();
+        System.out.println("main");
+        LdapClient client = new LdapClient();
         client.loadProperty("target/classes/tinycore.properties");
         client.init();
         NamingEnumeration results = client.get(
                 client.getProperty("test_ldap_search_node"),
-                 client.getProperty("test_ldap_search_filter")
+                client.getProperty("test_ldap_search_filter")
         );
 
         try {
@@ -144,10 +145,10 @@ public class LdapClientTest {
         System.out.println("get");
         LdapClient instance = new LdapClient();
         instance.loadProperty("target/classes/tinycore.properties");
-   
+
         String node = instance.getProperty("test_ldap_search_node");
         String filter = instance.getProperty("test_ldap_search_filter");
-        
+
         NamingEnumeration result = instance.get(node, filter);
         assertNotNull(result);
     }
@@ -161,12 +162,12 @@ public class LdapClientTest {
         LdapClient instance = new LdapClient();
         instance.loadProperty("target/classes/tinycore.properties");
 
-        String uid = instance.getProperty("test_ldap_search_node");
-        String password = instance.getProperty("test_ldap_search_filter");
+        String uid = instance.getProperty("test_ldap_user");
+        String password = instance.getProperty("test_ldap_password");
 
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.auth(uid, password);
         assertEquals(expResult, result);
     }
-    
+
 }

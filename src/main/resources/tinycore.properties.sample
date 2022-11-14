@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# this file is needed to change belows for building, and rename into tinycore.properties
 
 ldap_url=
 ldap_admin_context=
@@ -18,3 +20,7 @@ ldap_admin_password=
 
 test_ldap_search_node=
 test_ldap_search_filter=
+
+test_ldap_user=
+test_ldap_password=
+
