@@ -39,13 +39,13 @@ public class LdapClient {
 
     private String admin_password = "";
 
-    private HashMap env;
+    private HashMap<String,String> env;
     private DirContext context;
 
     private String partition;
 
     public LdapClient() {
-        this.env = new HashMap();
+        this.env = new HashMap<>();
     }
 
     public void loadProperty(String filePath) {
@@ -91,7 +91,7 @@ public class LdapClient {
             this.env.put(Context.SECURITY_PRINCIPAL, this.base_principal);
             this.env.put(Context.SECURITY_CREDENTIALS, this.admin_password);
 
-            this.context = new InitialDirContext(new Hashtable(this.env));
+            this.context = new InitialDirContext(new Hashtable<>(this.env));
             results = this.context.search(node, filter, constraints);
             this.context.close();
 
@@ -109,7 +109,7 @@ public class LdapClient {
         env.put(Context.SECURITY_CREDENTIALS, password); //パスワード
 
         try {
-            this.context = new InitialDirContext(new Hashtable(env));
+            this.context = new InitialDirContext(new Hashtable<>(env));
             this.context.close();
             System.out.println("auth ok");
             res = true;
