@@ -1,3 +1,4 @@
+.vscode
 nb-configuration.xml
 /target/
 *.properties
