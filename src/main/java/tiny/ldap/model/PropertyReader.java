@@ -16,8 +16,6 @@
 package tiny.ldap.model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -46,9 +44,7 @@ public class PropertyReader {
             Logger.getLogger(this.getClass().getName()).info(f.getAbsolutePath());
             properties.load(
                     Files.newBufferedReader(Paths.get(f.getAbsolutePath()), StandardCharsets.UTF_8));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PropertyReader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(PropertyReader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
