@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tiny.core.model;
+package tiny.ldap.model;
 
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -103,8 +103,7 @@ public class LdapClientTest {
         client.init();
         NamingEnumeration results = client.get(
                 client.getProperty("test_ldap_search_node"),
-                client.getProperty("test_ldap_search_filter")
-        );
+                client.getProperty("test_ldap_search_filter"));
 
         try {
             while (results != null && results.hasMore()) {
@@ -118,15 +117,14 @@ public class LdapClientTest {
                     System.out.println("No attributes");
                 } else {
                     /* 属性の出力 */
-                    for (NamingEnumeration ae = attrs.getAll();
-                            ae.hasMoreElements();) {
+                    for (NamingEnumeration ae = attrs.getAll(); ae.hasMoreElements();) {
                         Attribute attr = (Attribute) ae.next();
                         String attrId = attr.getID();
 
                         /* 属性値の出力 */
-                        for (Enumeration vals = attr.getAll();
-                                vals.hasMoreElements();
-                                System.out.println(attrId + ": " + vals.nextElement()));
+                        for (Enumeration vals = attr.getAll(); vals.hasMoreElements(); System.out
+                                .println(attrId + ": " + vals.nextElement()))
+                            ;
                     }
                 }
                 System.out.println();
