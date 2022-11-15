@@ -69,10 +69,6 @@ public class LdapClient {
         return this.partition;
     }
 
-    public static void main(String[] args) {
-
-    }
-
     public void init() {
 
         this.env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
