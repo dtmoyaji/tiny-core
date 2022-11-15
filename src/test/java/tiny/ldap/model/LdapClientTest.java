@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchResult;
@@ -129,7 +130,7 @@ public class LdapClientTest {
                 }
                 System.out.println();
             }
-        } catch (Exception ex) {
+        } catch (NamingException ex) {
             Logger.getLogger(LdapClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
