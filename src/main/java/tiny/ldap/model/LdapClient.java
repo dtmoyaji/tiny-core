@@ -40,9 +40,9 @@ public class LdapClient {
 
     private PropertyReader propReader = null;
 
-    private String base_principal = "";
+    private String basePrincipal;
 
-    private String admin_password = "";
+    private String adminPassword;
 
     private final HashMap<String, String> env;
     private DirContext context;
@@ -76,8 +76,8 @@ public class LdapClient {
         this.env.put(Context.SECURITY_AUTHENTICATION, "simple");
 
         this.env.put(Context.PROVIDER_URL, this.propReader.getProperty(LdapClient.LDAP_URL));
-        this.base_principal = this.propReader.getProperty(LdapClient.LDAP_ADMIN_CONTEXT);
-        this.admin_password = this.propReader.getProperty(LdapClient.LDAP_ADMIN_PASSWORD);
+        this.basePrincipal = this.propReader.getProperty(LdapClient.LDAP_ADMIN_CONTEXT);
+        this.adminPassword = this.propReader.getProperty(LdapClient.LDAP_ADMIN_PASSWORD);
 
     }
 
@@ -87,8 +87,8 @@ public class LdapClient {
             SearchControls constraints = new SearchControls();
             constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
-            this.env.put(Context.SECURITY_PRINCIPAL, this.base_principal);
-            this.env.put(Context.SECURITY_CREDENTIALS, this.admin_password);
+            this.env.put(Context.SECURITY_PRINCIPAL, this.basePrincipal);
+            this.env.put(Context.SECURITY_CREDENTIALS, this.adminPassword);
             this.context = new InitialDirContext(new Hashtable<>(this.env));
             results = this.context.search(node, filter, constraints);
             this.context.close();
