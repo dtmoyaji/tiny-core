@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 /**
  * プロパティファイルを読み込んで値を供給するクラス.
- * 
+ *
  * @author daianjimax
  */
 public class PropertyReader {
@@ -36,7 +36,7 @@ public class PropertyReader {
 
     /**
      * コンストラクタ
-     * 
+     *
      * @param filePath プロパティファイルのパス
      */
     public PropertyReader(String filePath) {
@@ -55,7 +55,7 @@ public class PropertyReader {
 
     /**
      * プロパティを取得する
-     * 
+     *
      * @param key 検索キー
      * @return プロパティ値
      */

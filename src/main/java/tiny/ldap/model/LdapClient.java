@@ -43,7 +43,7 @@ public class LdapClient {
 
     private String admin_password = "";
 
-    private HashMap<String, String> env;
+    private final HashMap<String, String> env;
     private DirContext context;
 
     private String partition;
@@ -88,7 +88,6 @@ public class LdapClient {
 
             this.env.put(Context.SECURITY_PRINCIPAL, this.base_principal);
             this.env.put(Context.SECURITY_CREDENTIALS, this.admin_password);
-
             this.context = new InitialDirContext(new Hashtable<>(this.env));
             results = this.context.search(node, filter, constraints);
             this.context.close();
