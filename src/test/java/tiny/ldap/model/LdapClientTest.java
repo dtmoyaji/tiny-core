@@ -101,7 +101,7 @@ public class LdapClientTest {
         LdapClient client = new LdapClient();
         client.loadProperty("target/classes/tinycore.properties");
         client.init();
-        NamingEnumeration results = client.get(
+        NamingEnumeration<SearchResult> results = client.get(
                 client.getProperty("test_ldap_search_node"),
                 client.getProperty("test_ldap_search_filter"));
 
@@ -117,14 +117,14 @@ public class LdapClientTest {
                     System.out.println("No attributes");
                 } else {
                     /* 属性の出力 */
-                    for (NamingEnumeration ae = attrs.getAll(); ae.hasMoreElements();) {
+                    for (NamingEnumeration<?> ae = attrs.getAll(); ae.hasMoreElements();) {
                         Attribute attr = (Attribute) ae.next();
                         String attrId = attr.getID();
 
                         /* 属性値の出力 */
-                        for (Enumeration vals = attr.getAll(); vals.hasMoreElements(); System.out
-                                .println(attrId + ": " + vals.nextElement()))
-                            ;
+                        for (Enumeration<?> vals = attr.getAll(); vals.hasMoreElements();) {
+                            System.out.println(attrId + ": " + vals.nextElement());
+                        }
                     }
                 }
                 System.out.println();
@@ -147,7 +147,7 @@ public class LdapClientTest {
         String node = instance.getProperty("test_ldap_search_node");
         String filter = instance.getProperty("test_ldap_search_filter");
 
-        NamingEnumeration result = instance.get(node, filter);
+        NamingEnumeration<?> result = instance.get(node, filter);
         assertNotNull(result);
     }
 

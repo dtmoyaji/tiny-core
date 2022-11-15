@@ -25,6 +25,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
 
 /**
  * Ldap Client
@@ -80,8 +81,8 @@ public class LdapClient {
 
     }
 
-    public NamingEnumeration get(String node, String filter) {
-        NamingEnumeration results = null;
+    public NamingEnumeration<SearchResult> get(String node, String filter) {
+        NamingEnumeration<SearchResult> results = null;
         try {
             SearchControls constraints = new SearchControls();
             constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -109,7 +110,7 @@ public class LdapClient {
         try {
             this.context = new InitialDirContext(new Hashtable<>(env));
             this.context.close();
-            System.out.println("auth ok");
+            Logger.getLogger(LdapClient.class.getName()).log(Level.INFO, "Authenticated.");
             res = true;
         } catch (NamingException ex) {
             Logger.getLogger(LdapClient.class.getName()).log(Level.SEVERE, null, ex);
