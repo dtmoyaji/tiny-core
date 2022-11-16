@@ -15,8 +15,6 @@
  */
 package org.tiny.ldap.model;
 
-import org.tiny.ldap.model.PropertyReader;
-import org.tiny.ldap.model.LdapClient;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
