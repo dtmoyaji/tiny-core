@@ -18,6 +18,7 @@ package tiny.ldap.model;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -77,7 +78,7 @@ public class LdapClientTest {
         String filePath = "target/classes/tinycore.properties";
         instance.loadProperty(filePath);
 
-        String result = instance.getProperty(key);
+        String result = instance.getProperty(Context.PROVIDER_URL);
         assertNotNull(result);
     }
 
@@ -101,13 +102,13 @@ public class LdapClientTest {
         System.out.println("main");
         LdapClient client = new LdapClient();
         client.loadProperty("target/classes/tinycore.properties");
-        client.init();
+        
+        PropertyReader pr = new PropertyReader("target/classes/tinycore.properties");
 
         NamingEnumeration<SearchResult> results = client.get(
-                client.getProperty("test_ldap_search_node"),
-                client.getProperty("test_ldap_search_filter"),
-                new String[]{"entryUUID", "memberOf", "*"}
-        );
+                pr.getProperty("test_ldap_search_node"),
+                pr.getProperty("test_ldap_search_filter"),
+                new String[] { "entryUUID", "memberOf", "*" });
 
         try {
             while (results != null && results.hasMore()) {
@@ -147,9 +148,11 @@ public class LdapClientTest {
         System.out.println("get");
         LdapClient instance = new LdapClient();
         instance.loadProperty("target/classes/tinycore.properties");
+        
+        PropertyReader pr = new PropertyReader("target/classes/tinycore.properties");
 
-        String node = instance.getProperty("test_ldap_search_node");
-        String filter = instance.getProperty("test_ldap_search_filter");
+        String node = pr.getProperty("test_ldap_search_node");
+        String filter = pr.getProperty("test_ldap_search_filter");
 
         NamingEnumeration<?> result = instance.get(node, filter);
         assertNotNull(result);
@@ -163,9 +166,11 @@ public class LdapClientTest {
         System.out.println("auth");
         LdapClient instance = new LdapClient();
         instance.loadProperty("target/classes/tinycore.properties");
+        
+        PropertyReader pr = new PropertyReader("target/classes/tinycore.properties");
 
-        String uid = instance.getProperty("test_ldap_user");
-        String password = instance.getProperty("test_ldap_password");
+        String uid = pr.getProperty("test_ldap_user");
+        String password = pr.getProperty("test_ldap_password");
 
         boolean expResult = true;
         boolean result = instance.auth(uid, password);

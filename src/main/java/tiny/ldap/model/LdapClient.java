@@ -38,12 +38,6 @@ public class LdapClient {
     public static final String LDAP_ADMIN_CONTEXT = "ldap_admin_context";
     public static final String LDAP_ADMIN_PASSWORD = "ldap_admin_password";
 
-    private PropertyReader propReader = null;
-
-    private String basePrincipal;
-
-    private String adminPassword;
-
     private final HashMap<String, String> env;
     private DirContext context;
 
@@ -51,40 +45,68 @@ public class LdapClient {
 
     public LdapClient() {
         this.env = new HashMap<>();
+        this.env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        this.env.put(Context.SECURITY_AUTHENTICATION, "simple");
     }
 
+    /**
+     * プロパティファイルに記述した設定値を格納する。
+     * @param filePath 
+     */
     public void loadProperty(String filePath) {
-        this.propReader = new PropertyReader(filePath);
-        this.init();
+        PropertyReader propReader = new PropertyReader(filePath);
+        this.setLdapUrl(propReader.getProperty(LdapClient.LDAP_URL));
+        this.setAdminContext(propReader.getProperty(LdapClient.LDAP_ADMIN_CONTEXT));
+        this.setAdminPassword(propReader.getProperty(LdapClient.LDAP_ADMIN_PASSWORD));
+    }
+
+    public void setLdapUrl(String url) {
+        this.env.put(Context.PROVIDER_URL, url);
+    }
+
+    public String getLdapUrl() {
+        return this.env.get(Context.PROVIDER_URL);
     }
 
     public String getProperty(String key) {
-        return this.propReader.getProperty(key);
+        return this.env.get(key);
     }
 
     public void setPartition(String partition) {
         this.partition = partition;
     }
 
+    public String getAdminPassword() {
+        return this.env.get(LDAP_ADMIN_PASSWORD);
+    }
+
+    public void setAdminPassword(String password) {
+        this.env.put(LDAP_ADMIN_PASSWORD, password);
+    }
+
     public String getPartition() {
         return this.partition;
     }
 
-    public void init() {
+    public void setAdminContext(String principal) {
+        this.env.put(LDAP_ADMIN_CONTEXT, principal);
+    }
 
-        this.env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        this.env.put(Context.SECURITY_AUTHENTICATION, "simple");
-
-        this.env.put(Context.PROVIDER_URL, this.propReader.getProperty(LdapClient.LDAP_URL));
-        this.basePrincipal = this.propReader.getProperty(LdapClient.LDAP_ADMIN_CONTEXT);
-        this.adminPassword = this.propReader.getProperty(LdapClient.LDAP_ADMIN_PASSWORD);
-
+    public String getAdminContext() {
+        return this.env.get(LDAP_ADMIN_CONTEXT);
     }
 
     public NamingEnumeration<SearchResult> get(String node, String filter) {
-        return get(node, filter, new String[]{"*"});
+        return get(node, filter, new String[] { "*" });
     }
 
+    /**
+     * LDAP内を検索する
+     * @param node
+     * @param filter
+     * @param returnAttributes
+     * @return 検索結果
+     */
     public NamingEnumeration<SearchResult> get(String node, String filter, String[] returnAttributes) {
         NamingEnumeration<SearchResult> results = null;
         try {
@@ -92,8 +114,10 @@ public class LdapClient {
             constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
             constraints.setReturningAttributes(returnAttributes);
 
-            this.env.put(Context.SECURITY_PRINCIPAL, this.basePrincipal);
-            this.env.put(Context.SECURITY_CREDENTIALS, this.adminPassword);
+            // 管理者で検索
+            this.env.put(Context.SECURITY_PRINCIPAL, this.getAdminContext());
+            this.env.put(Context.SECURITY_CREDENTIALS, this.getAdminPassword());
+            
             this.context = new InitialDirContext(new Hashtable<>(this.env));
             results = this.context.search(node, filter, constraints);
             this.context.close();
@@ -104,16 +128,21 @@ public class LdapClient {
         return results;
     }
 
+    /**
+     * ユーザー認証を行う
+     * @param uid
+     * @param password
+     * @return true-可 false-不可
+     */
     public boolean auth(String uid, String password) {
         boolean res = false;
 
-        // LDAP接続情報
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, uid); // ID, 組織
-        env.put(Context.SECURITY_CREDENTIALS, password); // パスワード
+        // ユーザーで検索
+        this.env.put(Context.SECURITY_PRINCIPAL, uid); // ID, 組織
+        this.env.put(Context.SECURITY_CREDENTIALS, password); // パスワード
 
         try {
-            this.context = new InitialDirContext(new Hashtable<>(env));
+            this.context = new InitialDirContext(new Hashtable<>(this.env));
             this.context.close();
             Logger.getLogger(LdapClient.class.getName()).log(Level.INFO, "Authenticated.");
             res = true;
