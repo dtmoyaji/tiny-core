@@ -73,7 +73,6 @@ public class LdapClientTest {
     @Test
     public void testGetProperty() {
         System.out.println("getProperty");
-        String key = LdapClient.LDAP_URL;
         LdapClient instance = new LdapClient();
         String filePath = "target/classes/tinycore.properties";
         instance.loadProperty(filePath);
@@ -102,7 +101,7 @@ public class LdapClientTest {
         System.out.println("main");
         LdapClient client = new LdapClient();
         client.loadProperty("target/classes/tinycore.properties");
-        
+
         PropertyReader pr = new PropertyReader("target/classes/tinycore.properties");
 
         NamingEnumeration<SearchResult> results = client.get(
@@ -148,7 +147,7 @@ public class LdapClientTest {
         System.out.println("get");
         LdapClient instance = new LdapClient();
         instance.loadProperty("target/classes/tinycore.properties");
-        
+
         PropertyReader pr = new PropertyReader("target/classes/tinycore.properties");
 
         String node = pr.getProperty("test_ldap_search_node");
@@ -166,7 +165,7 @@ public class LdapClientTest {
         System.out.println("auth");
         LdapClient instance = new LdapClient();
         instance.loadProperty("target/classes/tinycore.properties");
-        
+
         PropertyReader pr = new PropertyReader("target/classes/tinycore.properties");
 
         String uid = pr.getProperty("test_ldap_user");
