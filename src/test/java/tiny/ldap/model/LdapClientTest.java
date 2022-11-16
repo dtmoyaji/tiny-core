@@ -102,9 +102,12 @@ public class LdapClientTest {
         LdapClient client = new LdapClient();
         client.loadProperty("target/classes/tinycore.properties");
         client.init();
+
         NamingEnumeration<SearchResult> results = client.get(
                 client.getProperty("test_ldap_search_node"),
-                client.getProperty("test_ldap_search_filter"));
+                client.getProperty("test_ldap_search_filter"),
+                new String[]{"entryUUID", "memberOf", "*"}
+        );
 
         try {
             while (results != null && results.hasMore()) {

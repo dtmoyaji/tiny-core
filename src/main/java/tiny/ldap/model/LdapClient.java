@@ -82,10 +82,15 @@ public class LdapClient {
     }
 
     public NamingEnumeration<SearchResult> get(String node, String filter) {
+        return get(node, filter, new String[]{"*"});
+    }
+
+    public NamingEnumeration<SearchResult> get(String node, String filter, String[] returnAttributes) {
         NamingEnumeration<SearchResult> results = null;
         try {
             SearchControls constraints = new SearchControls();
             constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            constraints.setReturningAttributes(returnAttributes);
 
             this.env.put(Context.SECURITY_PRINCIPAL, this.basePrincipal);
             this.env.put(Context.SECURITY_CREDENTIALS, this.adminPassword);
