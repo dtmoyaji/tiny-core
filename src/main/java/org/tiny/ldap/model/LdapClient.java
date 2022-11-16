@@ -1,4 +1,4 @@
-package tiny.ldap.model;
+package org.tiny.ldap.model;
 
 import java.util.HashMap;
 import java.util.Hashtable;
