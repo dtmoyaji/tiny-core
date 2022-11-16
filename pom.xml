@@ -22,7 +22,7 @@
 	<groupId>tiny</groupId>
 	<artifactId>tiny-ldap</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<!-- TODO project name  -->
 	<name>tiny-ldap</name>
 	<description></description>
